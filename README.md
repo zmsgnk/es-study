@@ -58,7 +58,7 @@ Elasticsearchで検索する方法には、`query`と`filter`の2つがありま
 
 ### よく使いそうなクエリ ###
 
-`simple_query_string`
+`simple_query_string`クエリ
 
 渋谷にあるカレー屋さんを検索
 ```Shell
@@ -143,7 +143,7 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 
 -------------------------------------
 
-`bool`
+`bool`クエリ
 
 ```Shell
 curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
@@ -188,9 +188,10 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 
 -------------------------------------
 
-`filtered`
+`filtered`クエリ
 
-クエリにフィルターを組み合わせる。
+クエリにフィルターを組み合わせる。下記の例では`range`フィルターと`simple_query_string`を
+組み合わせています。
 
 口コミ評価が5のやつで、タイトルと本文に"渋谷"と"カレー"を含む口コミを検索
 ```Shell
@@ -237,6 +238,8 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
   }
 }
 ```
+
+ちなみに、クエリを指定しないとフィルターだけ実行されます。
 
 -------------------------------------
 
