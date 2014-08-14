@@ -141,6 +141,8 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 }
 ```
 
+-------------------------------------
+
 `bool`
 
 ```Shell
@@ -184,7 +186,10 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 }
 ```
 
+-------------------------------------
+
 `filtered`
+
 クエリにフィルターを組み合わせる。
 
 口コミ評価が5のやつで、タイトルと本文に"渋谷"と"カレー"を含む口コミを検索
@@ -232,6 +237,8 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
   }
 }
 ```
+
+-------------------------------------
 
 
 ### よく使いそうなフィルター ###
