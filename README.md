@@ -72,7 +72,7 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 	  }
   },
   "size": 1
-}
+}'
 ```
 
 実行結果
@@ -113,7 +113,7 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
   },
   "sort": [{"access_count": {"order": "desc", "missing": "_last"}}],
   "size": 1
-}
+}'
 ```
 
 実行結果
@@ -140,3 +140,100 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
   }
 }
 ```
+
+`bool`
+
+```Shell
+curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
+{
+    "query": {
+        "bool": {
+            "must": [
+                {"term": {"address": "渋谷"}},
+                {"term": {"name": "カレー"}}
+            ]
+        }
+    },
+    "sort": [{"access_count": {"order": "desc", "missing": "_last"}}],
+    "size": 1
+}'
+```
+
+実行結果
+```JSON
+{
+  "took" : 9,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 3,
+    "successful" : 3,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 29,
+    "max_score" : null,
+    "hits" : [ {
+      "_index" : "ldgourmet",
+      "_type" : "restaurant",
+      "_id" : "3X35dbGNQDO-9XIsxiu2lg",
+      "_score" : null,
+      "_source":{"name":"カレーハウス チリチリ","property":null,"alphabet":"Curry House TIRITIRI","name_kana":"かれーはうすちりちり","pref_id":"13","area_id":"5","station_id1":"2248","station_time1":"10","station_distance1":"829","station_id2":"1673","station_time2":"13","station_distance2":"1014","station_id3":"2511","station_time3":"14","station_distance3":"1089","category_id1":"408","category_id2":"0","category_id3":"0","category_id4":"0","category_id5":"0","zip":"150-0011","address":"渋谷区東1-27-9","north_latitude":"35.39.03.100","east_longitude":"139.42.38.552","description":"埼京線渋谷駅新南口から明治通り沿いに恵比寿方向へ。並木橋交差点を超え200mほど歩くと右手にあります。    ※営業時間と定休日を再度修正しました。2005/07/12 from 管理人    営業時間を修正しました(サポート 2006/09/08)    定休日を更新しました。  (from 東京グルメ 2006/07/08)","purpose":"1,4","open_morning":"1","open_lunch":"1","open_late":"0","photo_count":"21","special_count":"11","menu_count":"2","fan_count":"24","access_count":"25904","created_on":"2003-06-14 18:44:19","modified_on":"2011-04-22 16:50:33","closed":"0"},
+      "sort" : [ 25904 ]
+    } ]
+  }
+}
+```
+
+`filtered`
+クエリにフィルターを組み合わせる。
+
+口コミ評価が5のやつで、タイトルと本文に"渋谷"と"カレー"を含む口コミを検索
+```Shell
+curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
+{
+	"query": {
+	  "filtered": {
+	    "query": {
+	      "simple_query_string": {
+	        "query": "渋谷 カレー",
+	        "fields": ["title", "body"],
+	        "default_operator": "and"
+	      }
+	    },
+	    "filter": {
+	      "range": {"total": {"gte": "5"}}
+	    }
+	  }
+	},
+	"size": 1
+}'
+```
+
+実行結果
+```JSON
+{
+  "took" : 21,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 3,
+    "successful" : 3,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 48,
+    "max_score" : 2.296202,
+    "hits" : [ {
+      "_index" : "ldgourmet",
+      "_type" : "rating",
+      "_id" : "D05jQRsORuSri_QrSGPBTA",
+      "_score" : 2.296202,
+      "_source":{"restaurant_id":"317436","user_id":"3633bf86","total":"5","food":"0","service":"0","atmosphere":"0","cost_performance":"0","title":"カレーは美味しいわよね　（＾−＾）　","body":"カレーは美味しいわよね　（＾−＾）　 渋谷駅から少し離れていますが そこがまた隠れ家的で素敵です。  知人に誘われて行ってきました。  Restaurant　TAKE（レストランタケ）   カレーはもちろん アラカルト料理もＧｏｏｄ♪  今回はデザートまで お腹に入れる事が出来ませんでしたが 次回は必ず頂きたいです！！  　　カレーを頂く前にアラカルト。 　　とっても綺麗なテリーヌをオーダーするも 　　あまりの綺麗さとおしゃべり＆食べるのに夢中で 　　写真を撮るのを忘れてしまった(ToT) 　　 　　生ハム、うまぁ〜〜〜♪  　　　イカも柔らかく、シュリンプも美味しい  　　アラカルトを食べたのに 　　カレーもちゃぁ〜〜〜んとお腹に入るのデス 　　それはやっぱり美味しいから♪ 　　辛さといいコクといいバッチリです。 　　近所で仕事をしていれば毎日通いたいくらいです  　今度はいつ誰と行こうかしら。 　と、ついつい次に行く予定を考えてしまいたくなるお店。 　 　あぁー美味しかった。ご馳走様でした（＾−＾）  ","purpose":"1","created_on":"2010-04-24 16:49:05"}
+    } ]
+  }
+}
+```
+
+
+### よく使いそうなフィルター ###
+
+
