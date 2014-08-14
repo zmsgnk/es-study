@@ -56,3 +56,39 @@ Elasticsearchで検索する方法には、`query`と`filter`の2つがありま
 - 値の大小などで単純な絞り込みをしたいとき
 - スコアに関係のない検索をしたいとき
 
+# `simple_query_string` #
+
+```Shell
+curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
+{
+	"query": {
+	  "simple\_query\_string": {
+	    "query": "渋谷 カレー",
+	    "fields": ["name", "address"]
+	  }
+  }
+}
+```
+
+```JSON
+{
+  "took" : 18,
+  "timed_out" : false,
+  "\_shards" : {
+    "total" : 3,
+    "successful" : 3,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 7096,
+    "max_score" : 2.2253304,
+    "hits" : [ {
+      "\_index" : "ldgourmet",
+      "\_type" : "restaurant",
+      "\_id" : "xcWUZvDPSlG0sx-PJKBdlw",
+      "\_score" : 2.2253304,
+      "\_source":{"name":"カレーの王様","property":null,"alphabet":null,"name\_kana":"かれーのおうさま","pref\_id":"13","area\_id":"5","station\_id1":"2248","station\_time1":"6","station\_distance1":"476","station\_id2":"3168","station\_time2":"12","station\_distance2":"974","station\_id3":"2340","station\_time3":"16","station\_distance3":"1271","category\_id1":"408","category\_id2":"218","category\_id3":"0","category\_id4":"0","category\_id5":"0","zip":null,"address":"渋谷区渋谷1-16-14渋谷地下鉄ビルディング1F","north\_latitude":"35.39.29.956","east\_longitude":"139.42.21.002","description":null,"purpose":null,"open\_morning":"1","open\_lunch":"1","open\_late":"0","photo\_count":"0","special\_count":"0","menu\_count":"0","fan\_count":"0","access\_count":"524","created\_on":"2009-03-12 10:45:58","modified_on":"2011-04-20 18:30:20","closed":"0"}
+    } ]
+  }
+}
+```
