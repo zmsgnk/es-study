@@ -1,6 +1,6 @@
 # es-study #
 
-Elasticsearchの勉強のメモです。
+Elasticsearchの勉強用メモです。
 
 ## Livedoorグルメの研究用データセットを登録する ##
 
