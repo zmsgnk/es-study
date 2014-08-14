@@ -28,21 +28,31 @@ curl -XPOST localhost:9200/ldgourmet -d @mapping.json
 
 ## query と filter ##
 
-Elasticsearchの検索には、`query`と`filter`を使います。
+Elasticsearchで検索する方法には、`query`と`filter`の2つがあります。
 それぞれ、`query`には約40種類、`filter`には約30種類あります。
 
 - [reference [1.x] » query dsl » queries](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-queries.html)
 - [reference [1.x] » query dsl » filters](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-filters.html)
 
-両者の違いは以下
+両者の特徴をそれぞれ公式ドキュメントより翻訳してみます。
 
 `query`
-> As a general rule, queries should be used instead of filters:
->  - for full text search
->  - where the result depends on a relevance score
+- 全文検索用に使う
+- 関連性スコア（relevance score）に依存する結果が欲しい時に使う
 
 `filter`
-> As a general rule, filters should be used instead of queries:
->  - for binary yes/no searchs
->  - for queries on exact values
+- フィルターはキャッシュされ、メモリもあまり使わない
+- 他のクエリが同じフィルターを使うとめっちゃ速い
+- `term`、`terms`、`prefix`や`range`などのフィルターはデフォルトでキャッシュされるようになっており、同じフィルターが複数の異なるクエリで
+利用されるような時におすすめ。例えば、"age higher than 10"のような`range`フィルター
+- `geo`や`script`などのフィルターは、デフォルトではキャッシュされずメモリのロードされる。これらのフィルターは元々速いし、キャッシュするためには
+単に実行するよりも余計に処理が増えるから。
+- 残りの`and`、`not`や`or`などのフィルターは他のフィルターを操作するので、基本的にはキャッシュされない。
+- すべてのフィルターは`_cache`要素と`_cache_key`要素を指定することで、明示的にキャッシュを操作することができる。
+大きなフィルターを使うときに便利。
+
+まとめると、`filter`は次のようなケースで使えばいいと思います。
+- 同じ検索条件を複数の異なるクエリで使いまわすようなケース
+- 値の大小などで単純な絞り込みをしたいとき
+- スコアに関係のない検索をしたいとき
 
