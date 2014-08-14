@@ -67,16 +67,18 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 	"query": {
 	  "simple_query_string": {
 	    "query": "渋谷 カレー",
-	    "fields": ["name", "address"]
+	    "fields": ["name", "address"],
+	    "default_operator": "and"
 	  }
-  }
+  },
+  "size": 1
 }
 ```
 
 実行結果
 ```JSON
 {
-  "took" : 18,
+  "took" : 19,
   "timed_out" : false,
   "_shards" : {
     "total" : 3,
@@ -84,7 +86,7 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
     "failed" : 0
   },
   "hits" : {
-    "total" : 7096,
+    "total" : 29,
     "max_score" : 2.2253304,
     "hits" : [ {
       "_index" : "ldgourmet",
@@ -92,6 +94,47 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
       "_id" : "xcWUZvDPSlG0sx-PJKBdlw",
       "_score" : 2.2253304,
       "_source":{"name":"カレーの王様","property":null,"alphabet":null,"name_kana":"かれーのおうさま","pref_id":"13","area_id":"5","station_id1":"2248","station_time1":"6","station_distance1":"476","station_id2":"3168","station_time2":"12","station_distance2":"974","station_id3":"2340","station_time3":"16","station_distance3":"1271","category_id1":"408","category_id2":"218","category_id3":"0","category_id4":"0","category_id5":"0","zip":null,"address":"渋谷区渋谷1-16-14渋谷地下鉄ビルディング1F","north_latitude":"35.39.29.956","east_longitude":"139.42.21.002","description":null,"purpose":null,"open_morning":"1","open_lunch":"1","open_late":"0","photo_count":"0","special_count":"0","menu_count":"0","fan_count":"0","access_count":"524","created_on":"2009-03-12 10:45:58","modified_on":"2011-04-20 18:30:20","closed":"0"}
+    } ]
+  }
+}
+```
+
+渋谷にあるカレー屋さんを検索して、PVが多い順にソートしてみる
+```Shell
+curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
+{
+	"query": {
+	  "simple_query_string": {
+	    "query": "渋谷 カレー",
+	    "fields": ["name", "address"],
+	    "default_operator": "and"
+	  }
+  },
+  "sort": [{"access_count": {"order": "desc", "missing": "_last"}}],
+  "size": 1
+}
+```
+
+実行結果
+```
+{
+  "took" : 24,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 3,
+    "successful" : 3,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 29,
+    "max_score" : null,
+    "hits" : [ {
+      "_index" : "ldgourmet",
+      "_type" : "restaurant",
+      "_id" : "3X35dbGNQDO-9XIsxiu2lg",
+      "_score" : null,
+      "_source":{"name":"カレーハウス チリチリ","property":null,"alphabet":"Curry House TIRITIRI","name_kana":"かれーはうすちりちり","pref_id":"13","area_id":"5","station_id1":"2248","station_time1":"10","station_distance1":"829","station_id2":"1673","station_time2":"13","station_distance2":"1014","station_id3":"2511","station_time3":"14","station_distance3":"1089","category_id1":"408","category_id2":"0","category_id3":"0","category_id4":"0","category_id5":"0","zip":"150-0011","address":"渋谷区東1-27-9","north_latitude":"35.39.03.100","east_longitude":"139.42.38.552","description":"埼京線渋谷駅新南口から明治通り沿いに恵比寿方向へ。並木橋交差点を超え200mほど歩くと右手にあります。    ※営業時間と定休日を再度修正しました。2005/07/12 from 管理人    営業時間を修正しました(サポート 2006/09/08)    定休日を更新しました。  (from 東京グルメ 2006/07/08)","purpose":"1,4","open_morning":"1","open_lunch":"1","open_late":"0","photo_count":"21","special_count":"11","menu_count":"2","fan_count":"24","access_count":"25904","created_on":"2003-06-14 18:44:19","modified_on":"2011-04-22 16:50:33","closed":"0"},
+      "sort" : [ 25904 ]
     } ]
   }
 }
