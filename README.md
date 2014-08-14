@@ -36,12 +36,13 @@ Elasticsearchの検索には、`query`と`filter`を使います。
 
 両者の違いは以下
 
-`query'
+`query`
 > As a general rule, queries should be used instead of filters:
 >  - for full text search
 >  - where the result depends on a relevance score
 
-'filter'
+`filter`
 > As a general rule, filters should be used instead of queries:
 >  - for binary yes/no searchs
 >  - for queries on exact values
+
