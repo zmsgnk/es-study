@@ -21,7 +21,7 @@ tar xvf ldgourmet.tar.gz
 ## インデックスの登録 ##
 
 ```Shell
-curl -XPOST localhost:9200/ldgourmet -d @mapping.json
+curl -XPOST 'localhost:9200/ldgourmet' -d @mapping.json
 ```
 
 ## データの登録 ##
