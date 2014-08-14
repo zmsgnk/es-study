@@ -56,8 +56,11 @@ Elasticsearchで検索する方法には、`query`と`filter`の2つがありま
 - 値の大小などで単純な絞り込みをしたいとき
 - スコアに関係のない検索をしたいとき
 
+## よく使いそうなクエリ ##
+
 ### `simple_query_string` ###
 
+クエリ
 ```Shell
 curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 {
@@ -70,6 +73,7 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 }
 ```
 
+実行結果
 ```JSON
 {
   "took" : 18,
