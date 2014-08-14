@@ -56,7 +56,7 @@ Elasticsearchで検索する方法には、`query`と`filter`の2つがありま
 - 値の大小などで単純な絞り込みをしたいとき
 - スコアに関係のない検索をしたいとき
 
-# `simple_query_string` #
+### `simple_query_string` ###
 
 ```Shell
 curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
