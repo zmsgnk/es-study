@@ -166,16 +166,16 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 ```Shell
 curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 {
-    "query": {
-        "bool": {
-            "must": [
-                {"term": {"address": "渋谷"}},
-                {"term": {"name": "カレー"}}
-            ]
-        }
-    },
-    "sort": [{"access_count": {"order": "desc", "missing": "_last"}}],
-    "size": 1
+  "query": {
+    "bool": {
+      "must": [
+        {"term": {"address": "渋谷"}},
+        {"term": {"name": "カレー"}}
+      ]
+    }
+  },
+  "sort": [{"access_count": {"order": "desc", "missing": "_last"}}],
+  "size": 1
 }'
 ```
 
@@ -276,29 +276,27 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 ```Shell
 curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d'
 {
-    "query": {
-        "filtered": {
-            "filter": {
-                "and": [
-                    {
-                        "range": {
-                            "total": {
-                                "from": "4",
-                                "to": "5"
-                            }
-                        }
-                    },
-                    {
-                        "term": {"body": "カレー"}
-                    },
-                    {
-                        "term": {"body": "渋谷"}
-                    }
-                ]
+  "query": {
+    "filtered": {
+      "filter": {
+        "and": [{
+          "range": {
+            "total": {
+              "from": "4",
+              "to": "5"
             }
-        }
-    },
-    "size": 1
+          }
+        },
+        {
+          "term": {"body": "カレー"}
+        },
+        {
+          "term": {"body": "渋谷"}
+        }]
+      }
+    }
+  },
+  "size": 1
 }'
 ```
 
@@ -365,14 +363,14 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d'
 ```Shell
 curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d'
 {
-    "query": {
-        "filtered": {
-            "filter": {
-                "exists": {"field": "title"}
-            }
-        }
-    },
-    "size": 1
+  "query": {
+    "filtered": {
+      "filter": {
+        "exists": {"field": "title"}
+      }
+    }
+  },
+  "size": 1
 }'
 ```
 
@@ -404,14 +402,14 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d'
 ```Shell
 curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d'
 {
-    "query": {
-        "filtered": {
-            "filter": {
-                "missing": {"field": "title"}
-            }
-        }
-    },
-    "size": 1
+  "query": {
+    "filtered": {
+      "filter": {
+        "missing": {"field": "title"}
+      }
+    }
+  },
+  "size": 1
 }'
 ```
 
