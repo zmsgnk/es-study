@@ -251,7 +251,14 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 
 -------------------------------------
 
+- ['fuzzy'クエリ （曖昧検索）](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-fuzzy-query.html)
+- ['template'クエリ](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-template-query.html)
+- ['function score'クエリ](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-function-score-query.html)
+- ['common terms'クエリ](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-common-terms-query.html)
+
+
+
+
 
 ### よく使いそうなフィルター ###
-
 
