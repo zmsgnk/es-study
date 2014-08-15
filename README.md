@@ -66,7 +66,7 @@ Elasticsearchで検索する方法には、`query`と`filter`の2つがありま
 
 ### よく使いそうなクエリ ###
 
-`simple_query_string`クエリ
+[`simple_query_string`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html)クエリ
 
 渋谷にあるカレー屋さんを検索
 ```Shell
@@ -151,7 +151,7 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 
 -------------------------------------
 
-`bool`クエリ
+[`bool`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-bool-query.html)クエリ
 
 `bool`クエリでは`must`、`should`、`must_not`の3つの条件を指定できます。
 
@@ -206,7 +206,7 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 
 -------------------------------------
 
-`filtered`クエリ
+[`filtered`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-filtered-query.html)クエリ
 
 クエリにフィルターを組み合わせる。下記の例では`range`フィルターと`simple_query_string`を
 組み合わせています。
@@ -269,7 +269,9 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 
 ### よく使いそうなフィルター ###
 
-`and`、`or`、`not` フィルター
+[`and`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-and-filter.html)、
+[`or`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-or-filter.html)、
+[`not`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-not-filter.html) フィルター
 
 ```Shell
 curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d'
@@ -328,14 +330,31 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d'
 
 -------------------------------------
 
-`bool`フィルター
+[`bool`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-bool-filter.html)フィルター
 
 基本的に`bool`クエリと使い方は同じ。違いはスコアが関係するかどうかと、
 デフォルトでキャッシュされるかどうか。
 
 -------------------------------------
 
-`exists`フィルターと`missing`フィルター
+[`range`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-range-filter.html)フィルター
+
+あるフィールドの値が特定の範囲に含まれているかどうかでフィルタリング
+
+`range`フィルターで使えるパラメターは以下の4つ
+
+- `gte`  Greater-than or equal to
+- `gt`   Greater-than
+- `lte`  Less-than or equal to 
+- `lt`   Less-than
+
+現時点では数値に対してのみ有効だが、バージョン1.4.0からは時間に対しても使えるようになるらしい。
+
+
+-------------------------------------
+
+[`exists`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-exists-filter.html)フィルターと
+[`missing`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-missing-filter.html)フィルター
 
 - `exists`
   - 特定のフィールドに値が入っているドキュメントを返す
