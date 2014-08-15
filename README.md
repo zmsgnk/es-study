@@ -465,3 +465,84 @@ ESで集計するには、[`facets`](http://www.elasticsearch.org/guide/en/elast
 バージョン1.4.0からは重い集計処理をキャッシュできるようになるらしい。
 
 
+[`range aggregation`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-aggregations-bucket-range-aggregation.html)
+を使って口コミを総合評価別に集計してみる。
+```Shell
+curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
+{
+  "query": {
+    "match_all": {}
+  },
+  "aggs": {
+    "rating_range": {
+      "range": {
+        "field": "total",
+        "ranges": [
+          {"from": 1, "to": 2},
+          {"from": 2, "to": 3},
+          {"from": 3, "to": 4},
+          {"from": 4, "to": 5},
+          {"from": 5}
+        ]
+      }
+    }
+  }
+}'
+```
+
+実行結果
+```JSON
+{
+  "took" : 34,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 3,
+    "successful" : 3,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 419647,
+    "max_score" : 0.0,
+    "hits" : [ ]
+  },
+  "aggregations" : {
+    "rating_range" : {
+      "buckets" : [ {
+        "key" : "1.0-2.0",
+        "from" : 1.0,
+        "from_as_string" : "1.0",
+        "to" : 2.0,
+        "to_as_string" : "2.0",
+        "doc_count" : 4971
+      }, {
+        "key" : "2.0-3.0",
+        "from" : 2.0,
+        "from_as_string" : "2.0",
+        "to" : 3.0,
+        "to_as_string" : "3.0",
+        "doc_count" : 14552
+      }, {
+        "key" : "3.0-4.0",
+        "from" : 3.0,
+        "from_as_string" : "3.0",
+        "to" : 4.0,
+        "to_as_string" : "4.0",
+        "doc_count" : 64681
+      }, {
+        "key" : "4.0-5.0",
+        "from" : 4.0,
+        "from_as_string" : "4.0",
+        "to" : 5.0,
+        "to_as_string" : "5.0",
+        "doc_count" : 79530
+      }, {
+        "key" : "5.0-*",
+        "from" : 5.0,
+        "from_as_string" : "5.0",
+        "doc_count" : 34744
+      } ]
+    }
+  }
+}
+```
+
