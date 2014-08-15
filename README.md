@@ -26,6 +26,14 @@ curl -XPOST 'localhost:9200/ldgourmet' -d @mapping.json
 
 ## データの登録 ##
 
+id:yteraokaさんのスクリプトを拝借しました。
+今回は、livedoorグルメのデータセットのうち、レストラン情報と口コミ情報のデータを入れます。
+
+```Shell
+bulk_load_data.rb -t rating -f datasets/ratings.csv 
+bulk_load_data.rb -t restaurant -f datasets/restaurants.csv 
+```
+
 ## query と filter ##
 
 Elasticsearchで検索する方法には、`query`と`filter`の2つがあります。
