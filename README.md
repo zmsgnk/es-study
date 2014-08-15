@@ -72,7 +72,7 @@ Elasticsearchで検索する方法には、`query`と`filter`の2つがありま
 ```Shell
 curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 {
-	"query": {
+  "query": {
 	  "simple_query_string": {
 	    "query": "渋谷 カレー",
 	    "fields": ["name", "address"],
