@@ -153,6 +153,13 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 
 `bool`クエリ
 
+`bool`クエリでは`must`、`should`、`must_not`の3つの条件を指定できます。
+
+|:-------|:--------|
+|`must`  |指定したクエリを必ず含む|
+|`should`|含まれるべきクエリを指定することができる。`minimum_should_match`パラメターを指定することができる。|
+|`must_not`|指定したクエリを必ず含まない|
+
 ```Shell
 curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 {
@@ -257,3 +264,63 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 - [`common terms`クエリ](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-common-terms-query.html)
 
 ### よく使いそうなフィルター ###
+
+`and`、`or`、`not` フィルター
+
+```Shell
+curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d'
+{
+    "query": {
+        "filtered": {
+            "filter": {
+                "and": [
+                    {
+                        "range": {
+                            "total": {
+                                "from": "4",
+                                "to": "5"
+                            }
+                        }
+                    },
+                    {
+                        "term": {"body": "カレー"}
+                    },
+                    {
+                        "term": {"body": "渋谷"}
+                    }
+                ]
+            }
+        }
+    },
+    "size": 1
+}'
+```
+
+実行結果
+```JSON
+{
+  "took" : 5,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 3,
+    "successful" : 3,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 185,
+    "max_score" : 1.0,
+    "hits" : [ {
+      "_index" : "ldgourmet",
+      "_type" : "rating",
+      "_id" : "eKzC1jFkSlizF8c1_fxV8w",
+      "_score" : 1.0,
+      "_source":{"restaurant_id":"201","user_id":"7a407165","total":"4","food":"0","service":"0","atmosphere":"0","cost_performance":"0","title":null,"body":"本格系インド料理店としてはかなり老舗になるのではないでしょうか。  銀座の中心からは比較的離れた立地と、料理の特殊性を考慮すると  驚くべき長寿店という気がします。    ムルギランチも当然おいしいのですが、あの辛いトマトスープがかかせません。  カレーがさほど辛くない分を十分おぎなってくれます。  以前、家でトマトの水煮缶をミキサーにかけて、胡椒を中心にスパイスを  適当に入れて作ったらかなり近い味が再現できてしまいましたが、やはりお店にはかないません。  他の料理も食べようと思いつつ、どうしてもムルギとスープの組み合わせから  離れられないのは少し反省してます。    かなり前に恵比寿に出店していた時には、職場の渋谷からちょこちょこ食べに  出かけてましたが、あまり長続きしないでとても残念でした。    ★3.8","purpose":"0","created_on":"2005-04-25 14:48:34"}
+    } ]
+  }
+}
+```
+
+`or`フィルターと`not`フィルターも使い方は同じです。
+
+-------------------------------------
+
