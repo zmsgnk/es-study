@@ -459,7 +459,7 @@ ESで集計するには、[`facets`](http://www.elasticsearch.org/guide/en/elast
 `aggregations`は`facets`に比べより柔軟な集計ができる。将来的には`facets`モジュールはなくなり完全に`aggregations`の方へ移行
 するらしい。
 
-`aggregations`は大きく分けて`Bucketing`と`Metric`の2つの要素に分解できるそうですが、まだよくわかっていません。
+`aggregations`には大きく分けて`Bucketing`と`Metric`の2つがあるそうですが、まだよくわかっていません。
 [このブログ](https://www.found.no/foundation/elasticsearch-aggregations/)が参考になりそう。
 
 バージョン1.4.0からは重い集計処理をキャッシュできるようになるらしい。
