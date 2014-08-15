@@ -155,10 +155,12 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 
 `bool`クエリでは`must`、`should`、`must_not`の3つの条件を指定できます。
 
-|:-------|:--------|
-|`must`  |指定したクエリを必ず含む|
-|`should`|含まれるべきクエリを指定することができる。`minimum_should_match`パラメターを指定することができる。|
-|`must_not`|指定したクエリを必ず含まない|
+- `must`  
+  - 指定したクエリを必ず含む
+- `should` 
+  - 含まれるべきクエリを指定することができる。`minimum_should_match`パラメターを指定することができる。
+- `must_not` 
+  - 指定したクエリを必ず含まない
 
 ```Shell
 curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
@@ -262,6 +264,7 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 - [`template`クエリ](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-template-query.html)
 - [`function score`クエリ](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-function-score-query.html)
 - [`common terms`クエリ](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-common-terms-query.html)
+- [`geoshape`クエリ](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-geo-shape-query.html)
 
 ### よく使いそうなフィルター ###
 
@@ -323,4 +326,13 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d'
 `or`フィルターと`not`フィルターも使い方は同じです。
 
 -------------------------------------
+
+`bool`フィルター
+
+基本的に`bool`クエリと使い方は同じ。違いはスコアが関係するかどうかと、
+デフォルトでキャッシュされるかどうか。
+
+-------------------------------------
+
+
 
