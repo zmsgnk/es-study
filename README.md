@@ -158,7 +158,8 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 - `must`  
   - 指定したクエリを必ず含む
 - `should` 
-  - 含まれるべきクエリを指定することができる。`minimum_should_match`パラメターを指定することができる。
+  - 含まれるべきクエリを指定することができる。`minimum_should_match`パラメターで
+  最低限マッチしてほしいクエリの数を指定することができる。
 - `must_not` 
   - 指定したクエリを必ず含まない
 
@@ -260,11 +261,11 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 
 -------------------------------------
 
-- [`fuzzy`クエリ （曖昧検索）](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-fuzzy-query.html)
-- [`template`クエリ](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-template-query.html)
-- [`function score`クエリ](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-function-score-query.html)
-- [`common terms`クエリ](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-common-terms-query.html)
-- [`geoshape`クエリ](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-geo-shape-query.html)
+- [`fuzzy`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-fuzzy-query.html)
+- [`template`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-template-query.html)
+- [`function score`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-function-score-query.html)
+- [`common terms`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-common-terms-query.html)
+- [`geoshape`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-geo-shape-query.html)
 
 ### よく使いそうなフィルター ###
 
@@ -333,6 +334,105 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d'
 デフォルトでキャッシュされるかどうか。
 
 -------------------------------------
+
+`exists`フィルターと`missing`フィルター
+
+- `exists`
+  - 特定のフィールドに値が入っているドキュメントを返す
+- `missing`
+  - 特定のフィールドに値が入っていないドキュメントを返す
+
+口コミタイトルに値が入っている口コミを検索
+```Shell
+curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d'
+{
+    "query": {
+        "filtered": {
+            "filter": {
+                "exists": {"field": "title"}
+            }
+        }
+    },
+    "size": 1
+}'
+```
+
+実行結果
+```JSON
+{
+  "took" : 4,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 3,
+    "successful" : 3,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 31377,
+    "max_score" : 1.0,
+    "hits" : [ {
+      "_index" : "ldgourmet",
+      "_type" : "rating",
+      "_id" : "3ArlHT4vSMu8ByvQTDD33A",
+      "_score" : 1.0,
+      "_source":{"restaurant_id":"4455","user_id":"31973618","total":"3","food":"4","service":"2","atmosphere":"3","cost_performance":"4","title":"黒いカツカレー","body":"午前中の仕事が終わった帰り道に、会社の人がどうしても食べたいカツカレーがあるとのことで行ってみました。  神保町のキッチン南海って言うところで、ご飯の山の上にキャベツの千切りが乗っていて、山に立掛けるように薄めの揚げたてカツが一枚、そして真っ黒なルーがなみなみと!!  味はと言うとめっちゃスパイシーでもなく、マイルド系でした。  昨日、ハラペーニョソースたんまりのピザを食べてのどをやられた自分にも安心して食べられました(^^ゞ  行った時は、お店の2/3ぐらいの人がカツカレーを食べてましたよ。 次は普通のランチセットもたべてみたいですね。  店員さんのムダのない動きが素晴らしい☆ミ ","purpose":"1","created_on":"2009-07-05 12:11:02"}
+    } ]
+  }
+}
+```
+
+口コミタイトルに値が入っていない（null）の口コミを検索
+```Shell
+curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d'
+{
+    "query": {
+        "filtered": {
+            "filter": {
+                "missing": {"field": "title"}
+            }
+        }
+    },
+    "size": 1
+}'
+```
+
+実行結果
+```JSON
+{
+  "took" : 80,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 3,
+    "successful" : 3,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 388270,
+    "max_score" : 1.0,
+    "hits" : [ {
+      "_index" : "ldgourmet",
+      "_type" : "rating",
+      "_id" : "fB2X1-qAShGRml5nIG7-Kw",
+      "_score" : 1.0,
+      "_source":{"restaurant_id":"310595","user_id":"ee02f26a","total":"5","food":"0","service":"0","atmosphere":"0","cost_performance":"0","title":null,"body":"名前は忘れましたが、札幌で食べたお店よりも、全然こっちの方が美味しかったので、載せました。お店も綺麗（新規オープン・・）でランチは結構混んでいます。個人的にはゆったりと食事できるので夜の方がオススメです。  辛さが０倍から５０倍まで選べるのもＧＯＯＤ！、スープも２種類みたいで、友達は黄色がオススメと言っていましたが、自分は赤の方を食べました。かなり美味しかったです。店長も好感のもてるお兄さんでした。  駅近くなので一度お試しあれです！","purpose":"0","created_on":"2006-10-07 05:06:09"}
+    } ]
+  }
+}
+```
+
+[ここ](http://www.elasticsearch.org/guide/en/elasticsearch/guide/current/_dealing_with_null_values.html)に
+わかりやすい解説が載っています。
+
+-------------------------------------
+
+地理情報（緯度経度）を使ってフィルタリング
+- [`geo_bounding_box`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-geo-bounding-box-filter.html#query-dsl-geo-bounding-box-filter)
+- [`geo_distance`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-geo-distance-filter.html)
+- [`geo_distance_range`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-geo-distance-range-filter.html)
+- [`geo_polygon`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-geo-polygon-filter.html)
+- [`geo_shape`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-geo-shape-filter.html)
+- [`geohash_cell`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/query-dsl-geohash-cell-filter.html)
+
 
 
 
