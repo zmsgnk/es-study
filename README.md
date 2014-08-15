@@ -546,3 +546,5 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 }
 ```
 
+`range aggregations`では`from`は含むが、`to`は含まないことに注意が必要。
+
