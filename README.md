@@ -598,3 +598,100 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 ```
 
 ------------------------------------------------
+
+['percentiles'](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-aggregations-metrics-percentile-aggregation.html)、
+
+`percentiles`は分位点ごとに集計してくれる。デフォルトでは、[1%, 5%, 25%, 50%, 75%, 95%, 99%]の分位点で集計される。
+自分で、[95, 99, 99.9]のように指定することもできる。
+```Shell
+curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
+{
+  "query": {"match_all": {}},
+  "aggs": {
+    "pct_photo_count": {
+      "percentiles": {
+        "field": "photo_count"
+      }
+    }
+  },
+  "size": 0
+}'
+```
+
+実行結果
+```JSON 
+{
+  "took" : 610,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 3,
+    "successful" : 3,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 419647,
+    "max_score" : 0.0,
+    "hits" : [ ]
+  },
+  "aggregations" : {
+    "pct_photo_count" : {
+      "values" : {
+        "95.0" : 8.0,
+        "96.0" : 9.0,
+        "97.0" : 11.0,
+        "98.0" : 15.0,
+        "99.0" : 21.0
+      }
+    }
+  }
+}
+```
+
+-------------------------------------------------
+
+[`percentile_ranks`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-aggregations-metrics-percentile-rank-aggregation.html)
+
+`percentile_ranks`は`percentiles`とは逆の動きをする。つまり、与えた数値が属する分位点を返す。
+```Shell
+curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
+{
+  "query": {"match_all": {}},
+  "aggs": {
+    "pct_photo_count": {
+      "percentile_ranks": {
+        "field": "photo_count",
+        "values": [11.0, 15.0]
+      }
+    }
+  },
+  "size": 0
+}'
+```
+
+実行結果
+```JSON
+{
+  "took" : 679,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 3,
+    "successful" : 3,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 419647,
+    "max_score" : 0.0,
+    "hits" : [ ]
+  },
+  "aggregations" : {
+    "pct_photo_count" : {
+      "values" : {
+        "11.0" : 97.02225482546105,
+        "15.0" : 98.15532120679747
+      }
+    }
+  }
+}
+```
+
+-------------------------------------------------
