@@ -548,3 +548,53 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 
 `range aggregations`では`from`は含むが、`to`は含まないことに注意が必要。
 
+---------------------------------------------
+
+[`min`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-aggregations-metrics-min-aggregation.html)、
+[`max`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-aggregations-metrics-max-aggregation.html)、
+[`sum`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-aggregations-metrics-sum-aggregation.html)、
+[`avg`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-aggregations-metrics-avg-aggregation.html)、
+[`stats`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-aggregations-metrics-stats-aggregation.html)、
+[`extended_stats`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-aggregations-metrics-extendedstats-aggregation.html)
+
+`extended_stats`を実行してみる
+```Shell
+curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
+{
+  "query": {"match_all": {}},
+  "aggs": {"rating_stats": {"extended_stats": {"field": "total"}}},
+  "size": 0
+}'
+```
+
+実行結果
+```JSON
+{
+  "took" : 134,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 3,
+    "successful" : 3,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 419647,
+    "max_score" : 0.0,
+    "hits" : [ ]
+  },
+  "aggregations" : {
+    "rating_stats" : {
+      "count" : 205626,
+      "min" : 0.0,
+      "max" : 5.0,
+      "avg" : 3.501298473928394,
+      "sum" : 719958.0,
+      "sum_of_squares" : 2786388.0,
+      "variance" : 1.2916661964316827,
+      "std_deviation" : 1.136514934539658
+    }
+  }
+}
+```
+
+------------------------------------------------
