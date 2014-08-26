@@ -740,3 +740,66 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true&search_type=count' -d '
 ユニークユーザは17875人であることがわかりました。
 
 -------------------------------------------------
+
+`aggregations`と`facets`の大きな違いが、集計を入れ子にできるかどうかです。
+例えば、口コミ情報の総合評価（total）ごとに料理の評価（food）を集計するというようなことが
+`aggregations`では可能です。
+
+```Shell
+curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true&search_type=count' -d '
+{
+  "aggs": {
+    "RATING_TOTAL": {
+      "terms": {"field": "total"},
+      "aggs": {
+        "RATING_FOOD": {
+          "terms": {"field": "food"}
+        }
+      }
+    }
+  }
+}'
+```
+
+実行結果 (長くなるので一部だけ表示)
+```JSON
+{
+  "aggregations" : {
+    "RATING_TOTAL" : {
+      "buckets" : [ {
+        "key" : 4,
+        "key_as_string" : "4",
+        "doc_count" : 79530,
+        "RATING_FOOD" : {
+          "buckets" : [ {
+            "key" : 0,
+            "key_as_string" : "0",
+            "doc_count" : 45960
+          }, {
+            "key" : 4,
+            "key_as_string" : "4",
+            "doc_count" : 26050
+          }, {
+            "key" : 5,
+            "key_as_string" : "5",
+            "doc_count" : 4556
+          }, {
+            "key" : 3,
+            "key_as_string" : "3",
+            "doc_count" : 2892
+          }, {
+            "key" : 2,
+            "key_as_string" : "2",
+            "doc_count" : 64
+          }, {
+            "key" : 1,
+            "key_as_string" : "1",
+            "doc_count" : 8
+          } ]
+        }
+      }
+    }
+  }
+}
+```
+
