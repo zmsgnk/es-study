@@ -695,3 +695,48 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true' -d '
 ```
 
 -------------------------------------------------
+
+[`cardinality aggregation`](http://www.elasticsearch.org/guide/en/elasticsearch/reference/current/search-aggregations-metrics-cardinality-aggregation.html)
+
+任意のフィールドについて、ユニークな値の数を集計したいときは、`cardinality aggregation`を使えばできます。
+
+ユニークなユーザーが何人いるかどうかを調べます。
+```Shell
+curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true&search_type=count' -d '
+{
+  "aggs": {
+    "unique_user": {
+      "cardinality": {
+        "field": "user_id"
+      }
+    }
+  }
+}'
+```
+
+実行結果
+```JSON
+{
+  "took" : 684,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 3,
+    "successful" : 3,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 419647,
+    "max_score" : 0.0,
+    "hits" : [ ]
+  },
+  "aggregations" : {
+    "unique_user" : {
+      "value" : 17875
+    }
+  }
+}
+```
+
+ユニークユーザは17875人であることがわかりました。
+
+-------------------------------------------------
