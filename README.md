@@ -764,6 +764,18 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true&search_type=count' -d '
 実行結果 (長くなるので一部だけ表示)
 ```JSON
 {
+  "took" : 567,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 3,
+    "successful" : 3,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 419647,
+    "max_score" : 0.0,
+    "hits" : [ ]
+  },
   "aggregations" : {
     "RATING_TOTAL" : {
       "buckets" : [ {
@@ -797,7 +809,162 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true&search_type=count' -d '
             "doc_count" : 8
           } ]
         }
-      }
+      }, {
+        "key" : 3,
+        "key_as_string" : "3",
+        "doc_count" : 64681,
+        "RATING_FOOD" : {
+          "buckets" : [ {
+            "key" : 0,
+            "key_as_string" : "0",
+            "doc_count" : 41631
+          }, {
+            "key" : 3,
+            "key_as_string" : "3",
+            "doc_count" : 17489
+          }, {
+            "key" : 4,
+            "key_as_string" : "4",
+            "doc_count" : 4145
+          }, {
+            "key" : 2,
+            "key_as_string" : "2",
+            "doc_count" : 1213
+          }, {
+            "key" : 5,
+            "key_as_string" : "5",
+            "doc_count" : 171
+          }, {
+            "key" : 1,
+            "key_as_string" : "1",
+            "doc_count" : 32
+          } ]
+        }
+      }, {
+        "key" : 5,
+        "key_as_string" : "5",
+        "doc_count" : 34744,
+        "RATING_FOOD" : {
+          "buckets" : [ {
+            "key" : 0,
+            "key_as_string" : "0",
+            "doc_count" : 21702
+          }, {
+            "key" : 5,
+            "key_as_string" : "5",
+            "doc_count" : 11438
+          }, {
+            "key" : 4,
+            "key_as_string" : "4",
+            "doc_count" : 1488
+          }, {
+            "key" : 3,
+            "key_as_string" : "3",
+            "doc_count" : 106
+          }, {
+            "key" : 2,
+            "key_as_string" : "2",
+            "doc_count" : 9
+          }, {
+            "key" : 1,
+            "key_as_string" : "1",
+            "doc_count" : 1
+          } ]
+        }
+      }, {
+        "key" : 2,
+        "key_as_string" : "2",
+        "doc_count" : 14552,
+        "RATING_FOOD" : {
+          "buckets" : [ {
+            "key" : 0,
+            "key_as_string" : "0",
+            "doc_count" : 11747
+          }, {
+            "key" : 2,
+            "key_as_string" : "2",
+            "doc_count" : 1845
+          }, {
+            "key" : 3,
+            "key_as_string" : "3",
+            "doc_count" : 568
+          }, {
+            "key" : 1,
+            "key_as_string" : "1",
+            "doc_count" : 254
+          }, {
+            "key" : 4,
+            "key_as_string" : "4",
+            "doc_count" : 126
+          }, {
+            "key" : 5,
+            "key_as_string" : "5",
+            "doc_count" : 12
+          } ]
+        }
+      }, {
+        "key" : 0,
+        "key_as_string" : "0",
+        "doc_count" : 7148,
+        "RATING_FOOD" : {
+          "buckets" : [ {
+            "key" : 0,
+            "key_as_string" : "0",
+            "doc_count" : 6970
+          }, {
+            "key" : 4,
+            "key_as_string" : "4",
+            "doc_count" : 61
+          }, {
+            "key" : 3,
+            "key_as_string" : "3",
+            "doc_count" : 51
+          }, {
+            "key" : 5,
+            "key_as_string" : "5",
+            "doc_count" : 37
+          }, {
+            "key" : 2,
+            "key_as_string" : "2",
+            "doc_count" : 15
+          }, {
+            "key" : 1,
+            "key_as_string" : "1",
+            "doc_count" : 14
+          } ]
+        }
+      }, {
+        "key" : 1,
+        "key_as_string" : "1",
+        "doc_count" : 4971,
+        "RATING_FOOD" : {
+          "buckets" : [ {
+            "key" : 0,
+            "key_as_string" : "0",
+            "doc_count" : 4217
+          }, {
+            "key" : 1,
+            "key_as_string" : "1",
+            "doc_count" : 474
+          }, {
+            "key" : 2,
+            "key_as_string" : "2",
+            "doc_count" : 158
+          }, {
+            "key" : 3,
+            "key_as_string" : "3",
+            "doc_count" : 87
+          }, {
+            "key" : 4,
+            "key_as_string" : "4",
+            "doc_count" : 26
+          }, {
+            "key" : 5,
+            "key_as_string" : "5",
+            "doc_count" : 9
+          } ]
+        }
+      } ]
     }
   }
 }
