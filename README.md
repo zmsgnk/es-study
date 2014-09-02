@@ -973,7 +973,7 @@ curl -XGET 'localhost:9200/ldgourmet/_search?pretty=true&search_type=count' -d '
 ## エイリアスの作成 ##
 
 エイリアスを使えば、複数のインデックスを単一のインデックスのように扱うことができます。
-インデックスエイリアスを作成するには_aliasesというRESTのエンドポイントに対してHTTPの`POST`メソッドを
+インデックスエイリアスを作成するには`_aliases`というRESTのエンドポイントに対してHTTPの`POST`メソッドを
 実行します。
 
 ```Shell
